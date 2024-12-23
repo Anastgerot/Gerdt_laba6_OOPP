@@ -171,7 +171,9 @@ namespace Gerdt_laba6_OOPP
             countryEdit.Enabled = true;
             directorEdit.Enabled = true;
             isAvaliableBox.Enabled = true;
+
         }
+
 
         private void UpdateListBox()
         {
