@@ -47,13 +47,13 @@
             this.FilmslistBox = new System.Windows.Forms.ListBox();
             this.directorEdit = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.voiceActorsEdit = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.animationStyleEdit = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label3 = new System.Windows.Forms.Label();
+            this.voiceActorsEdit = new System.Windows.Forms.TextBox();
+            this.animationStyleEdit = new System.Windows.Forms.TextBox();
             this.isAvaliableBox = new System.Windows.Forms.CheckBox();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
@@ -254,15 +254,6 @@
             this.label6.TabIndex = 37;
             this.label6.Text = "Режиссер";
             // 
-            // voiceActorsEdit
-            // 
-            this.voiceActorsEdit.Location = new System.Drawing.Point(564, 393);
-            this.voiceActorsEdit.Margin = new System.Windows.Forms.Padding(4);
-            this.voiceActorsEdit.Name = "voiceActorsEdit";
-            this.voiceActorsEdit.Size = new System.Drawing.Size(272, 22);
-            this.voiceActorsEdit.TabIndex = 42;
-            this.voiceActorsEdit.Visible = false;
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -273,15 +264,6 @@
             this.label9.TabIndex = 41;
             this.label9.Text = "Актеры озвучки";
             this.label9.Visible = false;
-            // 
-            // animationStyleEdit
-            // 
-            this.animationStyleEdit.Location = new System.Drawing.Point(567, 446);
-            this.animationStyleEdit.Margin = new System.Windows.Forms.Padding(4);
-            this.animationStyleEdit.Name = "animationStyleEdit";
-            this.animationStyleEdit.Size = new System.Drawing.Size(272, 22);
-            this.animationStyleEdit.TabIndex = 44;
-            this.animationStyleEdit.Visible = false;
             // 
             // label8
             // 
@@ -308,13 +290,32 @@
             this.label3.TabIndex = 23;
             this.label3.Text = "Жанр";
             // 
+            // voiceActorsEdit
+            // 
+            this.voiceActorsEdit.Location = new System.Drawing.Point(562, 393);
+            this.voiceActorsEdit.Margin = new System.Windows.Forms.Padding(4);
+            this.voiceActorsEdit.Name = "voiceActorsEdit";
+            this.voiceActorsEdit.Size = new System.Drawing.Size(272, 22);
+            this.voiceActorsEdit.TabIndex = 46;
+            this.voiceActorsEdit.Visible = false;
+            // 
+            // animationStyleEdit
+            // 
+            this.animationStyleEdit.Location = new System.Drawing.Point(564, 446);
+            this.animationStyleEdit.Margin = new System.Windows.Forms.Padding(4);
+            this.animationStyleEdit.Name = "animationStyleEdit";
+            this.animationStyleEdit.Size = new System.Drawing.Size(272, 22);
+            this.animationStyleEdit.TabIndex = 47;
+            this.animationStyleEdit.Visible = false;
+            // 
             // isAvaliableBox
             // 
             this.isAvaliableBox.AutoSize = true;
-            this.isAvaliableBox.Location = new System.Drawing.Point(567, 336);
+            this.isAvaliableBox.Enabled = false;
+            this.isAvaliableBox.Location = new System.Drawing.Point(567, 331);
             this.isAvaliableBox.Name = "isAvaliableBox";
             this.isAvaliableBox.Size = new System.Drawing.Size(102, 20);
-            this.isAvaliableBox.TabIndex = 45;
+            this.isAvaliableBox.TabIndex = 48;
             this.isAvaliableBox.Text = "В прокате?";
             this.isAvaliableBox.UseVisualStyleBackColor = true;
             // 
@@ -325,8 +326,8 @@
             this.ClientSize = new System.Drawing.Size(843, 618);
             this.Controls.Add(this.isAvaliableBox);
             this.Controls.Add(this.animationStyleEdit);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.voiceActorsEdit);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.directorEdit);
             this.Controls.Add(this.label6);
@@ -347,7 +348,7 @@
             this.Controls.Add(this.titleEdit);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "    ";
             this.groupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -374,13 +375,13 @@
         private System.Windows.Forms.ListBox FilmslistBox;
         private System.Windows.Forms.TextBox directorEdit;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox voiceActorsEdit;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox animationStyleEdit;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox voiceActorsEdit;
+        private System.Windows.Forms.TextBox animationStyleEdit;
         private System.Windows.Forms.CheckBox isAvaliableBox;
     }
 }

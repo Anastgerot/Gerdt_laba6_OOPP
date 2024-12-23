@@ -3,51 +3,44 @@
 #include "framework.h"
 #include "filmoteka.h"
 
+
+BOOL APIENTRY DllMain(HMODULE hModule,
+    DWORD  ul_reason_for_call,
+    LPVOID lpReserved
+)
+{
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+    return TRUE;
+}
 filmoteka film_library;
 
 struct film_struct {
     char title[256];
     int year;
     char genre[256];
-    double rating;
+    float rating;
     char country[256];
     char director[256];
-    bool is_available;
     char voice_actors[256];
     char animation_style[256];
+    bool is_available;
 };
 
 extern "C" {
 
-    _declspec(dllexport) bool LoadFilm(const char* filename) {
-
-        try {
-            ifstream ifs(filename, ios::binary); 
-            if (!ifs) return false;
-
-            boost::archive::binary_iarchive ia(ifs); 
-            ia >> film_library; 
-            return true;
-
-        }
-        catch (...) {
-            return false;
-        }
-
+    _declspec(dllexport) void __stdcall LoadFilm(const char* filename) {
+        film_library.Load_movies(filename);
     }
 
-    _declspec(dllexport) bool Save(const char* filename) {
-        try {
-            ofstream ofs(filename, ios::binary); 
-            if (!ofs) return false;
-
-            boost::archive::binary_oarchive oa(ofs);
-            oa << film_library;
-            return true;
-        }
-        catch (...) {
-            return false;
-        }
+    _declspec(dllexport) void __stdcall Save(const char* filename) {
+        film_library.Save_movies(filename);
     }
 
     _declspec(dllexport) void Clear() {
@@ -62,7 +55,7 @@ extern "C" {
         if (!base_film) return;
 
         base_film->setTitle(film_data.title);
-        base_film->setYear(film_data.year);
+        base_film->setYear(film_data.year); 
         base_film->setGenre(film_data.genre);
         base_film->setRating(film_data.rating);
         base_film->setCountry(film_data.country);
@@ -82,7 +75,7 @@ extern "C" {
             film->setTitle("Новый фильм");
             film->setYear(0);
             film->setGenre("");
-            film->setRating(0);
+            film->setRating(0.0);
             film->setCountry("");
             film->setDirector("");
             film->setAvailability(false);
@@ -94,7 +87,7 @@ extern "C" {
             af->setTitle("Новый анимационный фильм");
             af->setYear(0);
             af->setGenre("");
-            af->setRating(0);
+            af->setRating(0.0);
             af->setCountry("");
             af->setDirector("");
             af->setAvailability(false);

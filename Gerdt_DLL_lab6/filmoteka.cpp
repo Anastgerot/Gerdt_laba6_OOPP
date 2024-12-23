@@ -2,12 +2,6 @@
 #include "filmoteka.h"
 #include "Utils.h"
 
-void filmoteka::start() {
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
-    locale::global(locale("Russian"));
-}
-
 void filmoteka::Add(shared_ptr<films> film) {
     movies.push_back(film);
 }
@@ -32,4 +26,24 @@ void filmoteka::Delete(int id) {
 
 void filmoteka::Clear_Films() {
     movies.clear();
+}
+
+void filmoteka::Save_movies(const string& filename) {
+    ofstream fout(filename);
+    if (!fout) {
+        return;
+    }
+    boost::archive::text_oarchive oa(fout);
+    oa << movies;
+}
+
+void filmoteka::Load_movies(const string& filename) {
+
+    ifstream fin(filename);
+    if (!fin) {
+        return;
+    }
+    boost::archive::text_iarchive ia(fin);
+    movies.clear();
+    ia >> movies;
 }

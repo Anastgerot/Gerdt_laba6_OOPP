@@ -4,10 +4,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
+using static Gerdt_laba6_OOPP.Form1;
 
 namespace Gerdt_laba6_OOPP
 {
@@ -29,23 +32,23 @@ namespace Gerdt_laba6_OOPP
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
             public string Genre;
 
-            [MarshalAs(UnmanagedType.R8)]
-            public double Rating;
+            [MarshalAs(UnmanagedType.R4)]
+            public float Rating;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
             public string Country;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-            public string Director; 
-
-            [MarshalAs(UnmanagedType.Bool)]
-            public bool IsAvailable; 
+            public string Director;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
             public string VoiceActors; 
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
             public string AnimationStyle;
+
+            [MarshalAs(UnmanagedType.Bool)]
+            public bool IsAvailable;
         }
 
         // Подключение к DLL для операций с фильмами
@@ -53,10 +56,10 @@ namespace Gerdt_laba6_OOPP
         public static extern int GetSize();
 
         [DllImport(@"C:\Users\anast\OneDrive\Документы\GitHub\Lab6_OOPP\Gerdt_laba6_OOPP\x64\Debug\Gerdt_DLL_lab6.dll", CharSet = CharSet.Ansi)]
-        public static extern bool LoadFilm(StringBuilder filename);
+        public static extern bool LoadFilm(string filename);
 
         [DllImport(@"C:\Users\anast\OneDrive\Документы\GitHub\Lab6_OOPP\Gerdt_laba6_OOPP\x64\Debug\Gerdt_DLL_lab6.dll", CharSet = CharSet.Ansi)]
-        public static extern bool Save(StringBuilder filename);
+        public static extern bool Save(string filename);
 
         [DllImport(@"C:\Users\anast\OneDrive\Документы\GitHub\Lab6_OOPP\Gerdt_laba6_OOPP\x64\Debug\Gerdt_DLL_lab6.dll", CharSet = CharSet.Ansi)]
         public static extern void GetFilm(ref Film film, int id);
@@ -97,15 +100,16 @@ namespace Gerdt_laba6_OOPP
                     MessageBox.Show("Год выпуска должен быть в диапазоне от 1895 до текущего года.", "Ошибка ввода");
                     return;
                 }
-                else if (Convert.ToDouble(ratingEdit.Text) < 0 || Convert.ToDouble(ratingEdit.Text) > 10)
+                else if (Convert.ToDouble(ratingEdit.Text) < 0|| Convert.ToDouble(ratingEdit.Text) > 10)
                 {
                     MessageBox.Show("Рейтинг должен быть в диапазоне от 0 до 10.", "Ошибка ввода");
                     return;
                 }
+
                 beforeEditFilm.Title = titleEdit.Text;
                 beforeEditFilm.Year = Convert.ToInt32(yearEdit.Text);
                 beforeEditFilm.Genre = genreEdit.Text;
-                beforeEditFilm.Rating = Convert.ToDouble(ratingEdit.Text);
+                beforeEditFilm.Rating = Convert.ToSingle(ratingEdit.Text);
                 beforeEditFilm.Country = countryEdit.Text;
                 beforeEditFilm.Director = directorEdit.Text;
                 beforeEditFilm.IsAvailable = isAvaliableBox.Checked;
@@ -115,6 +119,11 @@ namespace Gerdt_laba6_OOPP
                 {
                     beforeEditFilm.VoiceActors = voiceActorsEdit.Text;
                     beforeEditFilm.AnimationStyle = animationStyleEdit.Text;
+                    if (string.IsNullOrEmpty(voiceActorsEdit.Text))
+                    {
+                        MessageBox.Show("Поле 'Актеры озвучки' не может быть пустым.", "Ошибка ввода");
+                        return;
+                    }
                 }
                 else
                 {
@@ -147,7 +156,7 @@ namespace Gerdt_laba6_OOPP
             directorEdit.Text = film.Director;
             isAvaliableBox.Checked = film.IsAvailable;
 
-            if (!string.IsNullOrEmpty(film.AnimationStyle))
+            if (!string.IsNullOrEmpty(film.VoiceActors))
             {
                 voiceActorsEdit.Text = film.VoiceActors;
                 animationStyleEdit.Text = film.AnimationStyle;
@@ -155,6 +164,7 @@ namespace Gerdt_laba6_OOPP
                 animationStyleEdit.Visible = true;
                 label8.Visible = true;
                 label9.Visible = true;
+
             }
             else
             {
@@ -171,9 +181,8 @@ namespace Gerdt_laba6_OOPP
             countryEdit.Enabled = true;
             directorEdit.Enabled = true;
             isAvaliableBox.Enabled = true;
-
+            ToggleButtons(true);
         }
-
 
         private void UpdateListBox()
         {
@@ -191,12 +200,28 @@ namespace Gerdt_laba6_OOPP
             AddFilm(0); 
             UpdateListBox();
             FilmslistBox.SelectedIndex = FilmslistBox.Items.Count - 1;
+
+            voiceActorsEdit.Text = "";
+            animationStyleEdit.Text = "";
+            voiceActorsEdit.Visible = false;
+            animationStyleEdit.Visible = false;
+            label8.Visible = false;
+            label9.Visible = false;
+            ToggleButtons(false);
+
         }
         private void addAnimationFilmBtn_Click(object sender, EventArgs e)
         {
             AddFilm(1);
             UpdateListBox();
             FilmslistBox.SelectedIndex = FilmslistBox.Items.Count - 1;
+            voiceActorsEdit.Text = "";
+            animationStyleEdit.Text = "";
+            voiceActorsEdit.Visible = true;
+            animationStyleEdit.Visible = true;
+            label8.Visible = true;
+            label9.Visible = true;
+            ToggleButtons(false);
         }
         private void deleteBtn_Click(object sender, EventArgs e)
         {
@@ -218,34 +243,75 @@ namespace Gerdt_laba6_OOPP
                     FilmslistBox.SelectedIndex = beforeDelete - 1;
                 }
             }
-
+            ToggleButtons(true);
+            if (GetSize() == 0)
+            {
+                titleEdit.Text = "";
+                yearEdit.Text = "";
+                genreEdit.Text = "";
+                ratingEdit.Text = "";
+                countryEdit.Text = "";
+                directorEdit.Text = "";
+                isAvaliableBox.Checked = false;
+                voiceActorsEdit.Text = "";
+                animationStyleEdit.Text = "";
+                titleEdit.Enabled = false;
+                yearEdit.Enabled = false;
+                genreEdit.Enabled = false;
+                ratingEdit.Enabled = false;
+                countryEdit.Enabled = false;
+                directorEdit.Enabled = false;
+                isAvaliableBox.Enabled = false;
+                voiceActorsEdit.Visible = false;
+                animationStyleEdit.Visible = false;
+                label8.Visible = false;
+                label9.Visible = false;
+                return;
+            }
         }
 
+        private void ToggleButtons(bool enable)
+        {
+            addFilmBtn.Enabled = enable;
+            addAnimationFilmBtn.Enabled = enable;
+            loadBtn.Enabled = enable;
+            saveBtn.Enabled = enable;
+            FilmslistBox.Enabled = enable;
+        }
 
         private void loadBtn_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "Binary Files (*.dat)|*.dat";
-            if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
+            try
             {
-                string fileName = openFileDialog1.FileName;
-                if (string.IsNullOrEmpty(fileName))
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                openFileDialog1.Filter = "Текстовый файл (*.txt)|*.txt";
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show("Файл не выбран.", "Ошибка");
-                    return;
+                    string fileName = openFileDialog1.FileName;
+                    LoadFilm(fileName);
+
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        MessageBox.Show("Файл не выбран.", "Ошибка");
+                        return;
+                    }
+
+                    if (!LoadFilm(fileName))
+                    {
+                        MessageBox.Show("Не удалось загрузить данные из файла.", "Ошибка");
+                        return;
+                    }
+
+                    UpdateListBox();
+                    MessageBox.Show("Данные успешно загружены.", "Успех");
                 }
-
-                var filePath = new StringBuilder(fileName);
-
-                if (!LoadFilm(filePath))
-                {
-                    MessageBox.Show("Не удалось загрузить данные. Проверьте файл.", "Ошибка");
-                    return;
-                }
-
-                UpdateListBox();
-                MessageBox.Show("Данные успешно загружены.", "Успех");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке файла: {ex.Message}\n{ex.StackTrace}");
             }
         }
+
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
@@ -255,21 +321,15 @@ namespace Gerdt_laba6_OOPP
                 return;
             }
 
-            saveFileDialog1.Filter = "Binary Files (*.dat)|*.dat";
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "Текстовый файл (*.txt)|*.txt";
+
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string fileName = saveFileDialog1.FileName;
-
-                if (string.IsNullOrEmpty(fileName))
+                if (Save(fileName))
                 {
-                    MessageBox.Show("Имя файла не может быть пустым.", "Ошибка");
-                    return;
-                }
-
-                var filename = new StringBuilder(fileName);
-
-                if (Save(filename))
-                {
+                    Save(fileName);
                     MessageBox.Show("Данные успешно сохранены.", "Успех");
                 }
                 else

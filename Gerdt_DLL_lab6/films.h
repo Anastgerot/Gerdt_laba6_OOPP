@@ -7,7 +7,7 @@ protected:
 	string title = "";
 	int year = 0;
 	string genre = "";
-	double rating = 0;
+	float rating =0;
 	string country = "";
 	string director = "";
 	bool is_available = false;
@@ -28,15 +28,15 @@ public:
 	string getTitle() const { return title; }
 	int getYear() const { return year; }
 	string getGenre() const { return genre; }
-	double getRating() const { return rating; }
+	float getRating() const { return rating; }
 	string getCountry() const { return country; }
 	string getDirector() const { return director; }
 	bool isAvailable() const { return is_available; }
 
-	void setTitle(const string& t) { title = t; }
-	void setYear(int y) { year = y; }
+	void setTitle(const string& title) { this->title = title; }
+	void setYear(int year) { this->year = year; }
 	void setGenre(const string& genre) { this->genre = genre; }
-	void setRating(double rating) { this->rating = rating; }
+	void setRating(float rating) { this->rating = rating; }
 	void setDirector(const string& director) { this->director = director; }
 	void setCountry(const string& country) { this->country = country; }
 	void setAvailability(bool is_available) { this->is_available = is_available; }

@@ -4,7 +4,6 @@
 
 class AnimatedFilm : public films
 {
-
 	friend class boost::serialization::access;
 
 protected:
@@ -18,14 +17,26 @@ public:
 	string getVoiceActors() const {return voice_actors;}
 	string getAnimationStyle() const {return animation_style;}
 
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 	virtual ~AnimatedFilm() {}
 
 	template<class Archive>
-	void serialize(Archive& ar, const unsigned int version) {
+	void save(Archive& ar, const unsigned int version) const
+	{
+		ar& boost::serialization::base_object<films>(*this);
+		ar& voice_actors;
+		ar& animation_style;
+	}
+
+	template<class Archive>
+	void load(Archive& ar, const unsigned int version)
+	{
 		ar& boost::serialization::base_object<films>(*this);
 		ar& voice_actors;
 		ar& animation_style;
 	}
 };
+
+BOOST_CLASS_VERSION(AnimatedFilm, 1);
 
